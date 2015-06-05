@@ -1,0 +1,30 @@
+#
+# Igor Shagadeev
+# shagastr@gmail.com
+#
+# this is boilerplate for canvas browser real-time mmo
+# build on top of tornado and redis
+#
+# inspired by agar.io
+
+
+
+
+
+install
+
+redis
+tornado
+python2-redis
+tornado-redis
+
+
+# launch redis server
+$ redis-server
+
+#launch app
+$ python app.py
+
+# open 127.0.0.1:8888/
+# simple play-test pressing f5 in this room - that freezes ur previous
+# instance because of lost websocket connection

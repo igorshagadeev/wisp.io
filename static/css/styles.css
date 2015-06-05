@@ -1,0 +1,79 @@
+body, html {
+/*     background-color: #222222; */
+}
+
+body {
+/*     background: url('../img/game.png') repeat; */
+}
+
+
+#states {
+/*     width:; */
+/*     height:30px; */
+}
+
+canvas {
+    border: 6px #333333 solid;
+    background-color: #000000;
+    cursor:crosshair;
+}
+
+#world {
+
+/*     width:100%; */
+/*     background: url('../img/game.png') repeat; */
+    cursor:crosshair;
+}
+
+
+/* modal style */
+
+
+
+#choice_modal .modal-body{
+    padding-bottom:0;
+}
+
+#choice_modal h2, #choice_modal h4{
+    margin-top: 0;
+}
+#choice_modal .modal-header {
+    border-bottom: none;
+}
+
+
+
+
+
+
+#go_btn{
+     width: 100px;
+}
+
+
+#ad2s_block {
+    height:100px;
+    width:400px;
+    margin:0 auto;
+    border:2px solid black;
+    
+    text-align:center;
+    color:#fff;
+    font-size:30px;
+    background:#000;
+}
+
+
+#connection{
+
+    display:none;
+
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    display: none;
+/*     background: transparent url("../images/loading-big.gif"); */
+    z-index: 1000;
+    height: 31px;
+    width: 31px;
+}
