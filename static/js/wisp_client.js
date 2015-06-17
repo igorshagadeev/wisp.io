@@ -37,9 +37,6 @@ function open_ws(){
 }
 
 
-
-
-
 /**
  * Helper function to get the value of a cookie.
  */
@@ -47,7 +44,6 @@ function cookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
     return r ? r[1] : undefined;
 }
-
 
 
 /*
@@ -103,19 +99,6 @@ showMessage = function(message) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Function to send new mouse position every X sec.
  */
@@ -136,13 +119,6 @@ function handleMouseMove(event) {
 
 
 
-
-
-
-
-
-
-
 /**
  * Function to getRandomName.
  */
@@ -158,25 +134,6 @@ function getRandomName( name_length) {
     }
     return name
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -531,9 +488,6 @@ Wisps = new(function() {
         };
 
 
-
-
-
         //e = canvas
         canvas = document.getElementById("world");
 
@@ -581,40 +535,6 @@ Wisps = new(function() {
 
     
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

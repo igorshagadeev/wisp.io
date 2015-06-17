@@ -96,7 +96,7 @@ class Game():
     def game_round(self, player):
         '''
         Calculate all interaction between players
-        ? - every mouse pos get
+         - every mouse pos get
         '''
         
         #sudden death mode

@@ -139,7 +139,6 @@ class RegHandler(BaseHandler):
 
 from tornado import gen
 
-
 class LogoutHandler(BaseHandler):
     def get(self):
         print 'logout'

@@ -21,38 +21,30 @@ import tornado.websocket
 import tornado.auth
 import tornado.options
 import tornado.escape
+
+from tornado.ioloop import IOLoop
+from tornado.web import RequestHandler, Application, url, StaticFileHandler
+from tornado.httpserver import HTTPServer
+from tornado.websocket import WebSocketHandler
+
 from tornado import gen
 
 # Redis modules.
-#import brukva
 import tornadoredis
-
 
 # Import application modules.
 from auth_middleware import BaseHandler
 from auth import LogoutHandler, RegHandler
 
-# Define port from command line parameter.
-tornado.options.define("port", default=8888, help="run on the given port", type=int)
-
-
-
-from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, Application, url, StaticFileHandler
-
-from tornado.httpserver import HTTPServer
-from tornado.websocket import WebSocketHandler
-
-
 
 from game import Game
-
-
 
 import urllib
 import urllib2
 
 
+# Define port from command line parameter.
+tornado.options.define("port", default=8888, help="run on the given port", type=int)
 
 
 
@@ -136,31 +128,6 @@ class MainHandler(BaseHandler):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ChatSocketHandler(tornado.websocket.WebSocketHandler):
     """
     Handler for dealing with websockets. It receives, stores and distributes new messages.
@@ -194,13 +161,11 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         # Create a Redis connection.
         self.client = redis_connect()
         
-        
         # TODO if yield or simple subscribe ???
         yield gen.Task(self.client.subscribe, self.room)
         
         # Subscribe to the given chat room.
         self.subscribed = True
-        
         
         logging.info('New user connected to chat room ' + room)
         
@@ -208,6 +173,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         #self.client.listen(self.on_message)
         self.on_ws_open()
         #response = yield
+        
         
     def on_ws_open(self):
         #print 'on_ws_open xxx'
@@ -246,12 +212,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             e = str(sys.exc_info()[0])
             self.write_message({'error': 1, 'textStatus': 'Error writing to database: ' + str(err)})
 
-
-
-       
-            
-
-    
 
     def on_messages_published(self, message):
         """
@@ -311,7 +271,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             if not player:
                 self.close()
             
-            
             # calculate game round for player
             self.application.game.game_round(player)
             
@@ -342,8 +301,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
                 message_encoded = tornado.escape.json_encode(message)
                 # tell about excluding dead one to all
                 self.application.client.publish(self.room, message_encoded)
-                
-                
                 
                 
             #change velocity and position
@@ -420,44 +377,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Application(tornado.web.Application):
     """
     Main Class for this application holding everything together.
@@ -507,6 +426,9 @@ class Application(tornado.web.Application):
         
         self.client.lpush('rooms', '')
 
+
+
+
 def redis_connect():
     """
     Established an asynchronous resi connection.
@@ -515,6 +437,9 @@ def redis_connect():
     client = tornadoredis.Client(host='127.0.0.1', port=6379)
     client.connect()
     return client
+
+
+
 
 
 
