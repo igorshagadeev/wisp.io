@@ -22,7 +22,7 @@ var ws;
 function define_user(){
     user._xsrf = cookie("_xsrf");
     user.user_name = cookie("user_name");
-    user.user_hash = cookie("user_hash");
+    user.user__hash = cookie("user__hash");
     user.room = cookie("room");
     console.log('user', user)
 }
@@ -54,7 +54,7 @@ function postTextMessage(data) {
     message._xsrf = user._xsrf;
 ////    these will be recieved via cookie at server automatically
 //     user.user_name;
-//     user.user_hash;
+//     user.user__hash;
 //     user.room;
     
     // Send message using websocket.
@@ -420,13 +420,13 @@ Wisps = new(function() {
                 showMessage(data);
 //                 console.log('data', data)
 //                 console.log('units', units.length)
-//                 console.log(data.user_hash)
+//                 console.log(data.user__hash)
                 
                 switch (data.type){
                     case 'move':{
                         // set new positions
                         for (var i = 0; i< units.length; i++){
-                            if (units[i]['id'] == data.user_hash) {
+                            if (units[i]['id'] == data.user__hash) {
 //                                  console.log("New velocity", data.velocity.split(','));
                                 var new_velocity = data.velocity.split(',');
                                 var new_position = data.position.split(',');
@@ -457,7 +457,7 @@ Wisps = new(function() {
                         var start_position = data.start_position.split(',')
 
                         z(name = data.user_name,
-                            id = data.user_hash,
+                            id = data.user__hash,
                           health = data.health,
                             position = new Vector(parseInt(start_position[0]), parseInt(start_position[1])),
                                 unit_type = 3);
@@ -467,7 +467,7 @@ Wisps = new(function() {
                         console.log('dead')
 
                         for (var i = 0; i< units.length; i++){
-                            if (units[i]['id'] == data.user_hash) {
+                            if (units[i]['id'] == data.user__hash) {
                                 units.pop();
                             }
                         }
