@@ -1,17 +1,18 @@
-#
-# Igor Shagadeev
-# shagastr@gmail.com
-#
-# this is boilerplate for canvas browser real-time mmo
-# build on top of tornado and redis
-#
-# inspired by agar.io
+
+ Igor Shagadeev
+ shagastr@gmail.com <br/>
+
+ this is boilerplate for canvas browser real-time mmo <br/>
+ build on top of tornado and redis <br/>
+
+ inspired by agar.io <br/>
+
+
+pylint ../wisp.io_git/ --extension-pkg-whitelist=tornado,numpy >> pylint.txt
 
 
 
-
-
-install
+install packages
 
 redis
 tornado
@@ -20,10 +21,10 @@ tornado-redis
 
 
 # launch redis server
-$ redis-server
+    $ redis-server
 
 #launch app
-$ python app.py
+    $ python app.py
 
 # open 127.0.0.1:8888/
 # simple play-test pressing f5 in this room - that freezes ur previous

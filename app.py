@@ -1,12 +1,13 @@
 # coding=UTF-8
 
 """
-### Igor Shagadeev
-### shagastr@gmail.com
+boilerplate for mmo game
+Igor Shagadeev
+shagastr@gmail.com
 """
 
 
-# General modules.
+# General modules
 import os, os.path
 import logging
 import sys
@@ -14,7 +15,7 @@ import sys
 #import string
 #import random
 
-# Tornado modules.
+# Tornado modules
 import tornado
 import tornado.ioloop
 import tornado.web
@@ -23,20 +24,14 @@ import tornado.auth
 import tornado.options
 import tornado.escape
 
-#from tornado.ioloop import IOLoop
-#from tornado.web import RequestHandler, Application, url, StaticFileHandler
-#from tornado.httpserver import HTTPServer
-#from tornado.websocket import WebSocketHandler
-
 from tornado import gen
 
-# Redis modules.
+# Redis modules
 import tornadoredis
 
-# Import application modules.
+# Import application modules
 from auth_middleware import BaseHandler
 from auth import LogoutHandler, RegHandler
-
 
 from game import Game
 
@@ -55,17 +50,6 @@ class MainHandler(BaseHandler):
     """
     Main request handler for the root path and for chat rooms.
     """
-
-    #def __init__(self, application, request, **kwargs):
-    #def __init__(self, *args, **kwargs):
-        ## Call super constructor.
-        #self._current_user = None
-        #self.room_name = None
-        #self.room = None
-        #self.room_name = None
-        #self.room_chat = None
-        #self.room_users_list = None
-        #super(MainHandler, self).__init__(self, *args, **kwargs)
 
     def initialize(self):
         """
@@ -92,7 +76,6 @@ class MainHandler(BaseHandler):
 
         self.room_users_list = None
 
-
         # Get the current user.
         self._get_current_user(callback=self.on_auth)
 
@@ -114,17 +97,14 @@ class MainHandler(BaseHandler):
             self.redirect("/room/" + self.room_name)
 
 
-        ## populate game session
-        # TODO maybe make it in game.py
-        # now get here all stored smwhere - in Redis? data about players in this room
+        # populate game session
+        # maybe make it in game.py
+        # now get here all stored in Redis data about players in this room
         #
         self.application.client.lrange(self.room, 0, -1, self.add_players)
 
-
         print "render room_game, game id", self.application.game.id
         self.render_default("room_game.html", content={}, chat=1)
-
-
 
 
     def add_players(self, stored_users):
@@ -147,10 +127,10 @@ class MainHandler(BaseHandler):
                 return
 
             print 'redis_user ', u
-            #save user in game session
+            # save user in game session
             self.application.game.add_player_fromdict(u)
 
-        #take every user object in Redis by key
+        # take every user object in Redis by key
         # and save in game session
         if stored_users:
             print 'work on stored_users :'
@@ -171,7 +151,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
     Handler for dealing with websockets. It receives, stores
     and distributes new messages.
 
-    TODO: Not proper authentication handling!
+    Not proper authentication handling!
     """
     def initialize(self):
         """
@@ -183,15 +163,8 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         self.room = None
         self.subscribed = None
 
-    #def __init__(self, *args, **kwargs):
-        #self.client = None
-        #self.room_name = None
-        #self.room = None
-        #self.subscribed = None
-        #super(ChatSocketHandler, self).__init__(self, *args, **kwargs)
-
-    #W:141, 0: Method 'data_received' is abstract
-    #in class 'RequestHandler' but is not overridden (abstract-method)
+    # W:141, 0: Method 'data_received' is abstract
+    # in class 'RequestHandler' but is not overridden (abstract-method)
 
     @gen.engine
     def open(self, room='root'):
@@ -205,14 +178,11 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             self.close()
             return
 
-
         # TODO not only messages
         #self.room = 'room:' + str(room)
         #self.room_chat = 'room:'+str(room) + ':chat'
         self.room_name = str(room)
         self.room = 'room:' + str(room) + ':chat'
-
-
         print 'room', room
 
         #self.new_message_send = False
@@ -220,7 +190,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         # Create a Redis connection.
         self.client = redis_connect()
 
-        # TODO if yield or simple subscribe ???
+        # simple subscribe
         yield gen.Task(self.client.subscribe, self.room)
 
         # Subscribe to the given chat room.
@@ -229,9 +199,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info('New user connected to chat room ' + room)
 
         self.client.listen(self.on_messages_published)
-        #self.client.listen(self.on_message)
         self.on_ws_open()
-        #response = yield
 
 
     def on_ws_open(self):
@@ -267,7 +235,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         try:
             for m in messages:
                 self.write_message(m)
-            #self.application.client.publish(self.room, {"messages":messages})
+            # self.application.client.publish(self.room, {"messages":messages})
         except Exception, err:
             e = str(sys.exc_info()[0])
             self.write_message({'error': 1, 'textStatus': 'Error writing to db: ' + str(err) + e})
@@ -279,12 +247,12 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         Redis Pub/Sub. When a new message is stored
         in the given Redis chanel this method will be called.
         """
-        #print 'recieved from redis channel', message.body
+        # print 'recieved from redis channel', message.body
         try:
             # Decode message
             m = tornado.escape.json_decode(message.body)
             # Send messages to other clients
-            #self.write_message(dict(messages=[m]))
+            # self.write_message(dict(messages=[m]))
             self.write_message(m)
         except ValueError:
             try:
@@ -324,9 +292,8 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             user_name = urllib2.unquote(self.get_cookie('user_name'))
             user__hash = urllib2.unquote(self.get_cookie('user__hash'))
 
-
             #get player
-            #TODO get user from game session ???
+            #get user from game session ?
             player = self.application.game.get_player(
                 name=user_name,
                 _hash=user__hash)
@@ -336,7 +303,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             # calculate game round for player
             self.application.game.game_round(player)
 
-            # TODO
             #
             # If health < 0 kill and render popup
             #remove form players in game session
@@ -388,8 +354,8 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             #print 'sended new message', message
 
             #save to redis
-            #get current user in redis hget - not need
-            #set HMSET new _hash to redis - overwrite all fields if
+            # get current user in redis hget - not need
+            # set HMSET new _hash to redis - overwrite all fields if
             # key exists otherwise write new _hash
             self.application.client.hmset(player.get_hash_key(), player.get_hash_dict())
 
@@ -416,7 +382,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
             return
 
         ## Send message through the socket to indicate a successful operation.
-        #self.write_message(message)
+        # self.write_message(message)
         return
 
 
@@ -434,9 +400,6 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
                 self.client.unsubscribe(self.room)
                 self.subscribed = False
                 self.client.disconnect()
-
-
-
 
 
 
@@ -490,8 +453,6 @@ class Application(tornado.web.Application):
         self.client.lpush('rooms', '')
 
 
-
-
 def redis_connect():
     """
     Established an asynchronous resi connection.
@@ -500,10 +461,6 @@ def redis_connect():
     client = tornadoredis.Client(host='127.0.0.1', port=6379)
     client.connect()
     return client
-
-
-
-
 
 
 # u can make it faster with per_core loops - look tornado docs
