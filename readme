@@ -1,11 +1,8 @@
 
- Igor Shagadeev
- shagastr@gmail.com <br/>
+ this is boilerplate for canvas browser real-time mmo
+ build on top of tornado and redis
 
- this is boilerplate for canvas browser real-time mmo <br/>
- build on top of tornado and redis <br/>
-
- inspired by agar.io <br/>
+ inspired by agar.io
 
 
 pylint ../wisp.io_git/ --extension-pkg-whitelist=tornado,numpy >> pylint.txt
